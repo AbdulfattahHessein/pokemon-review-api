@@ -1,4 +1,6 @@
-﻿using PokemonReviewApp.Interfaces;
+﻿using PokemonReviewApp.Bases;
+using PokemonReviewApp.Data;
+using PokemonReviewApp.Interfaces;
 using PokemonReviewApp.Repositories;
 
 namespace PokemonReviewApp.Configuration
@@ -7,12 +9,15 @@ namespace PokemonReviewApp.Configuration
     {
         internal static IServiceCollection AddRepositoriesServices(this IServiceCollection services)
         {
-            services.AddScoped<IPokemonRepository, PokemonRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICountryRepository, CountryRepository>();
-            services.AddScoped<IOwnerRepository, OwnerRepository>();
-            services.AddScoped<IReviewRepository, ReviewRepository>();
-            services.AddScoped<IReviewerRepository, ReviewerRepository>();
+            services.AddTransient<IPokemonsRepository, PokemonRepository>();
+            services.AddTransient<ICategoriesRepository, CategoryRepository>();
+            services.AddTransient<ICountriesRepository, CountryRepository>();
+            services.AddTransient<IOwnersRepository, OwnerRepository>();
+            services.AddTransient<IReviewsRepository, ReviewRepository>();
+            services.AddTransient<IReviewersRepository, ReviewerRepository>();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
 
             return services;
         }

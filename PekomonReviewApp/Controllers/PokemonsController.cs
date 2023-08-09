@@ -11,32 +11,32 @@ namespace PokemonReviewApp.Controllers
     [ApiController]
     public class PokemonsController : ControllerBase
     {
-        private readonly IPokemonRepository _pokemonRepository;
-        private readonly IOwnerRepository _ownerRepository;
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IPokemonsRepository _pokemonsRepository;
+        private readonly IOwnersRepository _ownersRepository;
+        private readonly ICategoriesRepository _categoriesRepository;
 
-        public PokemonsController(IPokemonRepository pokemonRepository, IOwnerRepository ownerRepository, ICategoryRepository categoryRepository)
+        public PokemonsController(IPokemonsRepository pokemonsRepository, IOwnersRepository ownersRepository, ICategoriesRepository categoriesRepository)
         {
-            _pokemonRepository = pokemonRepository;
-            _ownerRepository = ownerRepository;
-            _categoryRepository = categoryRepository;
+            _pokemonsRepository = pokemonsRepository;
+            _ownersRepository = ownersRepository;
+            _categoriesRepository = categoriesRepository;
         }
 
         //GET api/pokemons
-        [HttpPost("add")]
+        [HttpPost()]
         [ProducesResponseType(200, Type = typeof(Pokemon))]
         public IActionResult Add(int ownerId, int categoryId, [FromBody] PokemonDto pokemonDto)
         {
-            var owner = _ownerRepository.GetById(ownerId);
-            var category = _categoryRepository.GetById(categoryId);
+            var owner = _ownersRepository.GetById(ownerId);
+            var category = _categoriesRepository.GetById(categoryId);
 
             var pokemon = pokemonDto.MapTo<Pokemon>();
 
-            pokemon.Owners = new List<Owner>() { owner };
-            pokemon.Categories = new List<Category> { category };
+            pokemon.AddOwner(owner).AddCategory(category);
 
-            _pokemonRepository.Add(pokemon);
-            _pokemonRepository.SaveChanges();
+            _pokemonsRepository.Add(pokemon);
+
+            _pokemonsRepository.SaveChanges();
 
             return Ok(new
             {
@@ -53,7 +53,7 @@ namespace PokemonReviewApp.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Pokemon>))]
         public IActionResult GetAll()
         {
-            var pokemons = _pokemonRepository.GetAll().MapTo<PokemonDto>();
+            var pokemons = _pokemonsRepository.GetAll().MapTo<PokemonDto>();
 
             return Ok(pokemons);
         }
@@ -66,7 +66,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var pokemon = _pokemonRepository.GetById(id).MapTo<PokemonDto>();
+                var pokemon = _pokemonsRepository.GetById(id).MapTo<PokemonDto>();
                 return Ok(pokemon);
 
             }
@@ -74,10 +74,6 @@ namespace PokemonReviewApp.Controllers
             {
                 return NotFound(ex.Message);
             }
-
-            //var pokemon = _pokemonRepository.GetPokemon(id);
-            //return Ok(pokemon);
-
         }
 
         //GET api/pokemon/{id}
@@ -89,7 +85,7 @@ namespace PokemonReviewApp.Controllers
 
             try
             {
-                return Ok(_pokemonRepository.GetPokemonRating(pokeId));
+                return Ok(_pokemonsRepository.GetPokemonRating(pokeId));
             }
             catch (Exception ex)
             {

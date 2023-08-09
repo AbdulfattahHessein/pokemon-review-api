@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace PokemonReviewApp.Repositories
 {
-    public class OwnerRepository : BaseRepository<Owner>, IOwnerRepository
+    public class OwnerRepository : BaseRepository<Owner>, IOwnersRepository
     {
         public OwnerRepository(AppDbContext context) : base(context)
         {

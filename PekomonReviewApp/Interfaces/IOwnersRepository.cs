@@ -1,8 +1,9 @@
-﻿using PokemonReviewApp.Models;
+﻿using PokemonReviewApp.Bases;
+using PokemonReviewApp.Models;
 
 namespace PokemonReviewApp.Interfaces
 {
-    public interface IOwnerRepository : IBaseRepository<Owner>
+    public interface IOwnersRepository : IBaseRepository<Owner>
     {
         IEnumerable<Owner> GetOwnersOfPokemon(int pokemonId);
         IEnumerable<Pokemon> GetPokemonsOfOwner(int ownerId);

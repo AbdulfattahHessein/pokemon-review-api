@@ -4,7 +4,7 @@ using PokemonReviewApp.Models;
 
 namespace PokemonReviewApp.Repositories
 {
-    public class ReviewerRepository : BaseRepository<Reviewer>, IReviewerRepository
+    public class ReviewerRepository : BaseRepository<Reviewer>, IReviewersRepository
     {
         public ReviewerRepository(AppDbContext context) : base(context)
         {

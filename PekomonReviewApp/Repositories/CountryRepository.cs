@@ -5,7 +5,7 @@ using PokemonReviewApp.Models;
 
 namespace PokemonReviewApp.Repositories
 {
-    public class CountryRepository : BaseRepository<Country>, ICountryRepository
+    public class CountryRepository : BaseRepository<Country>, ICountriesRepository
     {
         public CountryRepository(AppDbContext context) : base(context) { }
 

@@ -5,6 +5,7 @@ using PokemonReviewApp.DTOs;
 using PokemonReviewApp.Helpers;
 using PokemonReviewApp.Interfaces;
 using PokemonReviewApp.Models;
+using PokemonReviewApp.Repositories;
 
 namespace PokemonReviewApp.Controllers
 {
@@ -12,11 +13,24 @@ namespace PokemonReviewApp.Controllers
     [ApiController]
     public class ReviewersController : ControllerBase
     {
-        private readonly IReviewerRepository _reviwerRepository;
+        private readonly IReviewersRepository _reviwersRepository;
 
-        public ReviewersController(IReviewerRepository reviewerRepository)
+        public ReviewersController(IReviewersRepository reviewersRepository)
         {
-            _reviwerRepository = reviewerRepository;
+            _reviwersRepository = reviewersRepository;
+        }
+
+        //Post api/reviewers
+        [HttpPost]
+        [ProducesResponseType(200, Type = typeof(ReviewerDto))]
+        public IActionResult Add(ReviewerDto reviewerDto)
+        {
+            var reviewer = reviewerDto.MapTo<Reviewer>();
+
+            _reviwersRepository.Add(reviewer);
+            _reviwersRepository.SaveChanges();
+
+            return Ok(reviewer.MapTo<ReviewerDto>());
         }
 
         //GET api/reviewers
@@ -24,7 +38,7 @@ namespace PokemonReviewApp.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<ReviewerDto>))]
         public IActionResult GetAll()
         {
-            var reviewers = _reviwerRepository.GetAll().MapTo<ReviewerDto>();
+            var reviewers = _reviwersRepository.GetAll().MapTo<ReviewerDto>();
 
             return Ok(reviewers);
         }
@@ -37,7 +51,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var reviewer = _reviwerRepository.GetById(id).MapTo<ReviewerDto>();
+                var reviewer = _reviwersRepository.GetById(id).MapTo<ReviewerDto>();
                 return Ok(reviewer);
 
             }
@@ -55,7 +69,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var reviews = _reviwerRepository.GetReviewsOfReviwer(reviewerId).MapTo<ReviewDto>();
+                var reviews = _reviwersRepository.GetReviewsOfReviwer(reviewerId).MapTo<ReviewDto>();
 
                 return Ok(reviews);
             }

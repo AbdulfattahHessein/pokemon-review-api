@@ -4,7 +4,7 @@ using PokemonReviewApp.Models;
 
 namespace PokemonReviewApp.Repositories
 {
-    public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
+    public class CategoryRepository : BaseRepository<Category>, ICategoriesRepository
     {
         public CategoryRepository(AppDbContext context) : base(context) { }
 

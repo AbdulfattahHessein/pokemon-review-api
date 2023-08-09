@@ -1,6 +1,8 @@
-﻿namespace PokemonReviewApp.Models
+﻿using PokemonReviewApp.Bases;
+
+namespace PokemonReviewApp.Models
 {
-    public class Owner
+    public class Owner : IEntity<int>
     {
         public int Id { get; set; }
         public string? FirstName { get; set; }

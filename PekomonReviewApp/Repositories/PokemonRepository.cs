@@ -5,7 +5,7 @@ using PokemonReviewApp.Models;
 
 namespace PokemonReviewApp.Repositories
 {
-    public class PokemonRepository : BaseRepository<Pokemon>, IPokemonRepository
+    public class PokemonRepository : BaseRepository<Pokemon>, IPokemonsRepository
     {
         private readonly DbSet<Pokemon> _pokemons;
         public PokemonRepository(AppDbContext context) : base(context)

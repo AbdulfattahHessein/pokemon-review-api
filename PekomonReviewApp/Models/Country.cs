@@ -1,6 +1,8 @@
-﻿namespace PokemonReviewApp.Models
+﻿using PokemonReviewApp.Bases;
+
+namespace PokemonReviewApp.Models
 {
-    public class Country
+    public class Country : IEntity<int>
     {
         public int Id { get; set; }
         public string? Name { get; set; }

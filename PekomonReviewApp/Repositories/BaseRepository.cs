@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PokemonReviewApp.Bases;
 using PokemonReviewApp.Data;
-using PokemonReviewApp.Interfaces;
 using PokemonReviewApp.Models;
 using System.Linq.Expressions;
 
 namespace PokemonReviewApp.Repositories
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity<int>
     {
         protected AppDbContext _context;
 
@@ -17,7 +17,7 @@ namespace PokemonReviewApp.Repositories
 
         public IEnumerable<T> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return _context.Set<T>().AsNoTracking().ToList();
         }
 
         public T GetById(int id)
@@ -36,7 +36,7 @@ namespace PokemonReviewApp.Repositories
         }
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[]? includes = null)
         {
-            IQueryable<T> query = _context.Set<T>();
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
             if (includes != null)
                 foreach (var include in includes)
@@ -47,9 +47,9 @@ namespace PokemonReviewApp.Repositories
 
         public bool IsExist(int id)
         {
-            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
-            var entity = _context.Set<T>().Find(id);
+            var entity = _context.Set<T>().AsNoTracking().FirstOrDefault(e => e.Id == id);
+
             return entity != null;
         }
 
