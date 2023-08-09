@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PokemonReviewApp.Bases;
 using PokemonReviewApp.Data;
 using PokemonReviewApp.DTOs;
 using PokemonReviewApp.Helpers;
@@ -13,11 +14,12 @@ namespace PokemonReviewApp.Controllers
     [ApiController]
     public class ReviewersController : ControllerBase
     {
-        private readonly IReviewersRepository _reviwersRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ReviewersController(IReviewersRepository reviewersRepository)
+        public ReviewersController(IUnitOfWork unitOfWork)
         {
-            _reviwersRepository = reviewersRepository;
+            _unitOfWork = unitOfWork;
+
         }
 
         //Post api/reviewers
@@ -27,8 +29,8 @@ namespace PokemonReviewApp.Controllers
         {
             var reviewer = reviewerDto.MapTo<Reviewer>();
 
-            _reviwersRepository.Add(reviewer);
-            _reviwersRepository.SaveChanges();
+            _unitOfWork.Reviewers.Add(reviewer);
+            _unitOfWork.Complete();
 
             return Ok(reviewer.MapTo<ReviewerDto>());
         }
@@ -38,7 +40,7 @@ namespace PokemonReviewApp.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<ReviewerDto>))]
         public IActionResult GetAll()
         {
-            var reviewers = _reviwersRepository.GetAll().MapTo<ReviewerDto>();
+            var reviewers = _unitOfWork.Reviewers.GetAll().MapTo<ReviewerDto>();
 
             return Ok(reviewers);
         }
@@ -51,7 +53,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var reviewer = _reviwersRepository.GetById(id).MapTo<ReviewerDto>();
+                var reviewer = _unitOfWork.Reviewers.GetById(id).MapTo<ReviewerDto>();
                 return Ok(reviewer);
 
             }
@@ -69,7 +71,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var reviews = _reviwersRepository.GetReviewsOfReviwer(reviewerId).MapTo<ReviewDto>();
+                var reviews = _unitOfWork.Reviewers.GetReviewsOfReviwer(reviewerId).MapTo<ReviewDto>();
 
                 return Ok(reviews);
             }

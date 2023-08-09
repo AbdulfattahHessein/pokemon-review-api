@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PokemonReviewApp.Bases;
 using PokemonReviewApp.DTOs;
 using PokemonReviewApp.Helpers;
 using PokemonReviewApp.Interfaces;
@@ -12,11 +13,11 @@ namespace PokemonReviewApp.Controllers
     [ApiController]
     public class CountriesController : ControllerBase
     {
-        private readonly ICountriesRepository _countriesRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CountriesController(ICountriesRepository countriesRepository)
+        public CountriesController(IUnitOfWork unitOfWork)
         {
-            _countriesRepository = countriesRepository;
+            _unitOfWork = unitOfWork;
         }
 
         //Post api/countries
@@ -26,8 +27,8 @@ namespace PokemonReviewApp.Controllers
         {
             var country = categoryDto.MapTo<Country>();
 
-            _countriesRepository.Add(country);
-            _countriesRepository.SaveChanges();
+            _unitOfWork.Countries.Add(country);
+            _unitOfWork.Complete();
 
             return Ok(country.MapTo<CountryDto>());
         }
@@ -37,7 +38,7 @@ namespace PokemonReviewApp.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Country>))]
         public IActionResult GetAll()
         {
-            var countries = _countriesRepository.GetAll().MapTo<CountryDto>();
+            var countries = _unitOfWork.Countries.GetAll().MapTo<CountryDto>();
 
             return Ok(countries);
         }
@@ -50,7 +51,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var country = _countriesRepository.GetById(id).MapTo<CountryDto>();
+                var country = _unitOfWork.Countries.GetById(id).MapTo<CountryDto>();
                 return Ok(country);
 
             }
@@ -68,7 +69,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                return Ok(_countriesRepository.GetCountryByOwnerId(ownerId).MapTo<CountryDto>());
+                return Ok(_unitOfWork.Countries.GetCountryByOwnerId(ownerId).MapTo<CountryDto>());
             }
             catch (Exception ex)
             {
@@ -84,8 +85,8 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var owners = _countriesRepository.GetOwnersFromACountry(countryId).MapTo<OwnerDto>();
-                var country = _countriesRepository.GetById(countryId).MapTo<CountryDto>();
+                var owners = _unitOfWork.Countries.GetOwnersFromACountry(countryId).MapTo<OwnerDto>();
+                var country = _unitOfWork.Countries.GetById(countryId).MapTo<CountryDto>();
 
                 return Ok(new
                 {

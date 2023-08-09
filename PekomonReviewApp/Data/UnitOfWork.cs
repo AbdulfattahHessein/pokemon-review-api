@@ -25,9 +25,9 @@ namespace PokemonReviewApp.Data
         public IOwnersRepository Owners { get; }
         public IReviewersRepository Reviewers { get; }
         public IReviewsRepository Reviews { get; }
-        public void Complete()
+        public int Complete()
         {
-            throw new NotImplementedException();
+            return _context.SaveChanges();
         }
         public void Dispose()
         {

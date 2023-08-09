@@ -11,6 +11,6 @@ namespace PokemonReviewApp.Bases
         IOwnersRepository Owners { get; }
         IReviewersRepository Reviewers { get; }
         IReviewsRepository Reviews { get; }
-        void Complete();
+        int Complete();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PokemonReviewApp.Bases;
 using PokemonReviewApp.DTOs;
 using PokemonReviewApp.Helpers;
 using PokemonReviewApp.Interfaces;
@@ -11,11 +12,11 @@ namespace CategoryReviewApp.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoriesRepository _categoriesRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoriesController(ICategoriesRepository categoriesRepository)
+        public CategoriesController(IUnitOfWork unitOfWork)
         {
-            _categoriesRepository = categoriesRepository;
+            this._unitOfWork = unitOfWork;
         }
 
         //Post api/categories
@@ -25,8 +26,8 @@ namespace CategoryReviewApp.Controllers
         {
             var category = categoryDto.MapTo<Category>();
 
-            _categoriesRepository.Add(category);
-            _categoriesRepository.SaveChanges();
+            _unitOfWork.Categories.Add(category);
+            _unitOfWork.Complete();
 
             return Ok(category);
         }
@@ -36,7 +37,7 @@ namespace CategoryReviewApp.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Category>))]
         public IActionResult GetAll()
         {
-            var categories = _categoriesRepository.GetAll().MapTo<CategoryDto>();
+            var categories = _unitOfWork.Categories.GetAll().MapTo<CategoryDto>();
 
             return Ok(categories);
         }
@@ -49,7 +50,7 @@ namespace CategoryReviewApp.Controllers
         {
             try
             {
-                var category = _categoriesRepository.GetById(id).MapTo<CategoryDto>();
+                var category = _unitOfWork.Categories.GetById(id).MapTo<CategoryDto>();
                 return Ok(category);
 
             }
@@ -71,7 +72,7 @@ namespace CategoryReviewApp.Controllers
         {
             try
             {
-                return Ok(_categoriesRepository.GetPokemonsByCategoryId(categoryId).MapTo<PokemonDto>());
+                return Ok(_unitOfWork.Categories.GetPokemonsByCategoryId(categoryId).MapTo<PokemonDto>());
             }
             catch (Exception ex)
             {
@@ -87,12 +88,12 @@ namespace CategoryReviewApp.Controllers
         {
             try
             {
-                if (!(categoryId == categoryDto?.Id && _categoriesRepository.IsExist(categoryId))) return BadRequest();
+                if (!(categoryId == categoryDto?.Id && _unitOfWork.Categories.IsExist(categoryId))) return BadRequest();
 
                 var category = categoryDto!.MapTo<Category>();
 
-                _categoriesRepository.Update(category);
-                _categoriesRepository.SaveChanges();
+                _unitOfWork.Categories.Update(category);
+                _unitOfWork.Complete();
 
                 return NoContent();
             }

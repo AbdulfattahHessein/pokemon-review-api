@@ -14,8 +14,5 @@ namespace PokemonReviewApp.Bases
         T Add(T entity);
         T Update(T entity);
         void Delete(T entity);
-
-        bool SaveChanges();
-
     }
 }

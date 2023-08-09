@@ -15,19 +15,11 @@ namespace PokemonReviewApp.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IReviewsRepository _reviewsRepository;
-        private readonly IReviewersRepository _reviewersRepository;
-        private readonly IPokemonsRepository _pokemonsRepository;
 
-        public ReviewsController(IUnitOfWork unitOfWork,
-            IReviewsRepository reviewsRepository,
-            IReviewersRepository reviewersRepository,
-            IPokemonsRepository pokemonsRepository)
+
+        public ReviewsController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _reviewsRepository = reviewsRepository;
-            _reviewersRepository = reviewersRepository;
-            _pokemonsRepository = pokemonsRepository;
         }
 
         //Post api/reviews
@@ -37,8 +29,9 @@ namespace PokemonReviewApp.Controllers
         {
             var review = reviewDto.MapTo<Review>();
 
-            var reviewr = _reviewersRepository.GetById(reviewerId);
-            var pokemon = _pokemonsRepository.GetById(pokemonId);
+
+            var reviewr = _unitOfWork.Reviewers.GetById(reviewerId);
+            var pokemon = _unitOfWork.Pokemons.GetById(pokemonId);
 
             review.Reviewer = reviewr;
             review.Pokemon = pokemon;
@@ -46,8 +39,8 @@ namespace PokemonReviewApp.Controllers
             //review.Reviewer.Id = reviewerId; // pokemon must be tracked first
             //review.Pokemon.Id = pokemonId;  // pokemon must be tracked first
 
-            _reviewsRepository.Add(review);
-            _reviewsRepository.SaveChanges();
+            _unitOfWork.Reviews.Add(review);
+            _unitOfWork.Complete();
 
             return Ok(review.MapTo<ReviewDto>());
         }
@@ -70,7 +63,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var review = _reviewsRepository.GetById(id).MapTo<ReviewDto>();
+                var review = _unitOfWork.Reviews.GetById(id).MapTo<ReviewDto>();
                 return Ok(review);
 
             }
@@ -88,7 +81,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var reviews = _reviewsRepository.GetReviewsOfPokemon(pokemonId).MapTo<ReviewDto>();
+                var reviews = _unitOfWork.Reviews.GetReviewsOfPokemon(pokemonId).MapTo<ReviewDto>();
 
                 return Ok(reviews);
             }

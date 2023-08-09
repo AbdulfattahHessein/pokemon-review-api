@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PokemonReviewApp.Bases;
 using PokemonReviewApp.Data;
 using PokemonReviewApp.DTOs;
 using PokemonReviewApp.Helpers;
@@ -13,11 +14,10 @@ namespace PokemonReviewApp.Controllers
     [ApiController]
     public class OwnersController : ControllerBase
     {
-        private readonly IOwnersRepository _ownersRepository;
-
-        public OwnersController(IOwnersRepository ownersRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public OwnersController(IUnitOfWork unitOfWork)
         {
-            _ownersRepository = ownersRepository;
+            _unitOfWork = unitOfWork;
         }
 
         //Post api/owners
@@ -27,8 +27,8 @@ namespace PokemonReviewApp.Controllers
         {
             var owner = ownerDto.MapTo<Owner>();
 
-            _ownersRepository.Add(owner);
-            _ownersRepository.SaveChanges();
+            _unitOfWork.Owners.Add(owner);
+            _unitOfWork.Complete();
 
             return Ok(owner);
         }
@@ -38,7 +38,7 @@ namespace PokemonReviewApp.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<OwnerDto>))]
         public IActionResult GetAll()
         {
-            var owners = _ownersRepository.GetAll().MapTo<OwnerDto>();
+            var owners = _unitOfWork.Owners.GetAll().MapTo<OwnerDto>();
 
             return Ok(owners);
         }
@@ -51,7 +51,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var owner = _ownersRepository.GetById(id).MapTo<OwnerDto>();
+                var owner = _unitOfWork.Owners.GetById(id).MapTo<OwnerDto>();
                 return Ok(owner);
 
             }
@@ -69,7 +69,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                return Ok(_ownersRepository.GetPokemonsOfOwner(ownerId).MapTo<PokemonDto>());
+                return Ok(_unitOfWork.Owners.GetPokemonsOfOwner(ownerId).MapTo<PokemonDto>());
             }
             catch (Exception ex)
             {
@@ -85,7 +85,7 @@ namespace PokemonReviewApp.Controllers
         {
             try
             {
-                var owners = _ownersRepository.GetOwnersOfPokemon(pokemonId).MapTo<OwnerDto>();
+                var owners = _unitOfWork.Owners.GetOwnersOfPokemon(pokemonId).MapTo<OwnerDto>();
 
                 return Ok(owners);
             }

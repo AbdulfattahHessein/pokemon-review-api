@@ -70,10 +70,5 @@ namespace PokemonReviewApp.Repositories
         {
             _context.Set<T>().Remove(entity);
         }
-
-        public bool SaveChanges()
-        {
-            return _context.SaveChanges() > 0;
-        }
     }
 }
