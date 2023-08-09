@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonReviewApp", "PekomonReviewApp\PokemonReviewApp.csproj", "{3425D537-A994-4F4D-B1BF-18F801469884}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requests", "Requests", "{0E49C620-A268-461D-88FF-82DE4F962932}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pokemon", "Pokemon", "{9373FBCF-7DDD-4D82-9999-E4D61B1F1417}"
+	ProjectSection(SolutionItems) = preProject
+		GetById.http = GetById.http
+		GetPokemons.http = GetPokemons.http
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3425D537-A994-4F4D-B1BF-18F801469884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3425D537-A994-4F4D-B1BF-18F801469884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3425D537-A994-4F4D-B1BF-18F801469884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3425D537-A994-4F4D-B1BF-18F801469884}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9373FBCF-7DDD-4D82-9999-E4D61B1F1417} = {0E49C620-A268-461D-88FF-82DE4F962932}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDFB9088-8E8D-4573-917A-511F5BE13A52}
+	EndGlobalSection
+EndGlobal

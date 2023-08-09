@@ -1,0 +1,6 @@
+@host=https://localhost:7126
+
+@id=3
+
+GET {{host}}/api/Pokemons/{{id}}
+Content-Type: application/json

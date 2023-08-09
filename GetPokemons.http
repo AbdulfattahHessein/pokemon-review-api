@@ -1,0 +1,30 @@
+@host=https://localhost:7126
+
+GET {{host}}/api/Pokemons
+Content-Type: application/json
+
+#{
+#	"firstName": "Amichai",
+#	"lastName": "Mantinband",
+#	"email": "amichai@mantinband.com",
+#	"password": "Amiko1232!"
+#}
+
+
+//can define multiple requests by add ###
+
+### 
+
+#define another request here
+
+@id=2
+
+GET {{host}}/api/Pokemons/{{id}}
+Content-Type: application/json
+
+#{
+#	"firstName": "Amichai",
+#	"lastName": "Mantinband",
+#	"email": "amichai@mantinband.com",
+#	"password": "Amiko1232!"
+#}
