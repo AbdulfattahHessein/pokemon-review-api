@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PokemonReviewApp.Bases;
 using PokemonReviewApp.Data;
-using PokemonReviewApp.Models;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace PokemonReviewApp.Repositories

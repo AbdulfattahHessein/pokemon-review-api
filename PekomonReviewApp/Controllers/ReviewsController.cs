@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PokemonReviewApp.Bases;
-using PokemonReviewApp.Data;
 using PokemonReviewApp.DTOs;
 using PokemonReviewApp.Helpers;
-using PokemonReviewApp.Interfaces;
 using PokemonReviewApp.Models;
-using PokemonReviewApp.Repositories;
 
 namespace PokemonReviewApp.Controllers
 {

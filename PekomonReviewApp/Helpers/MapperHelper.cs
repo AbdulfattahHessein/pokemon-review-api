@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using PokemonReviewApp.DTOs;
 using ServiceCollectionAccessorService;
 
 namespace PokemonReviewApp.Helpers

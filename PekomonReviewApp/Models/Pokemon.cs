@@ -1,6 +1,4 @@
-﻿using NuGet.Packaging;
-using PokemonReviewApp.Bases;
-using System.Linq;
+﻿using PokemonReviewApp.Bases;
 
 namespace PokemonReviewApp.Models
 {

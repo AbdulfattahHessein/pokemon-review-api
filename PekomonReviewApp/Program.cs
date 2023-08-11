@@ -2,8 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using PokemonReviewApp;
 using PokemonReviewApp.Configuration;
 using PokemonReviewApp.Data;
-using PokemonReviewApp.Interfaces;
-using PokemonReviewApp.Repositories;
 using ServiceCollectionAccessorService;
 using System.Reflection;
 
