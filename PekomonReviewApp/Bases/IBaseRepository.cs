@@ -4,15 +4,21 @@ namespace PokemonReviewApp.Bases
 {
     public interface IBaseRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
+        IQueryable<T> GetAll();
         T GetById(int id);
         bool IsExist(int id);
-        T Find(Expression<Func<T, bool>> criteria, string[] includes = null);
+        T GetFirstOrDefault(Expression<Func<T, bool>> criteria, string[] includes = null);
 
-        IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null);
+        IQueryable<T> GetWhere(Expression<Func<T, bool>> criteria, string[] includes = null);
 
-        T Add(T entity);
-        T Update(T entity);
+        bool Insert(T entity);
+        public void InsertList(List<T> entityList);
+        void Update(T entity);
+        public void UpdateList(List<T> entityList);
         void Delete(T entity);
+        public void DeleteList(List<T> entityList);
+        public void Attach(T entity);
+        public void AttachRange(IEnumerable<T> entities);
+
     }
 }

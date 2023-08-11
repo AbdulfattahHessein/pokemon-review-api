@@ -27,7 +27,7 @@ namespace PokemonReviewApp.Controllers
         {
             var country = categoryDto.MapTo<Country>();
 
-            _unitOfWork.Countries.Add(country);
+            _unitOfWork.Countries.Insert(country);
             _unitOfWork.Complete();
 
             return Ok(country.MapTo<CountryDto>());

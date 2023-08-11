@@ -29,7 +29,7 @@ namespace PokemonReviewApp.Controllers
         {
             var reviewer = reviewerDto.MapTo<Reviewer>();
 
-            _unitOfWork.Reviewers.Add(reviewer);
+            _unitOfWork.Reviewers.Insert(reviewer);
             _unitOfWork.Complete();
 
             return Ok(reviewer.MapTo<ReviewerDto>());
@@ -74,6 +74,31 @@ namespace PokemonReviewApp.Controllers
                 var reviews = _unitOfWork.Reviewers.GetReviewsOfReviwer(reviewerId).MapTo<ReviewDto>();
 
                 return Ok(reviews);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        //Put api/reviewers/1
+        [HttpPut("{reviewerId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult Update(int reviewerId, [FromBody] ReviewerDto? reviewerDto)
+        {
+            try
+            {
+                if (!(reviewerId == reviewerDto?.Id && _unitOfWork.Reviewers.IsExist(reviewerId)))
+                    return BadRequest();
+
+                var owner = reviewerDto!.MapTo<Reviewer>();
+
+                _unitOfWork.Reviewers.Update(owner);
+
+                _unitOfWork.Complete();
+
+                return NoContent();
             }
             catch (Exception ex)
             {

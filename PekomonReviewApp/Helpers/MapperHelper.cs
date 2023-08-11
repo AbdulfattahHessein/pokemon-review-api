@@ -25,5 +25,13 @@ namespace PokemonReviewApp.Helpers
             return (IEnumerable<TDest>)_mapper.Map(entities, entities.First().GetType(), typeof(IEnumerable<TDest>));
         }
 
+        public static TDest MapTo<TDest>(this object entity, TDest destination) //where TDest : IDto
+        {
+            return (TDest)_mapper.Map(entity, destination, entity.GetType(), typeof(TDest));
+        }
+
+
+
+
     }
 }

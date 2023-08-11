@@ -27,7 +27,7 @@ namespace PokemonReviewApp.Controllers
         {
             var owner = ownerDto.MapTo<Owner>();
 
-            _unitOfWork.Owners.Add(owner);
+            _unitOfWork.Owners.Insert(owner);
             _unitOfWork.Complete();
 
             return Ok(owner);
@@ -96,7 +96,7 @@ namespace PokemonReviewApp.Controllers
         }
 
         //Put api/owners/1
-        [HttpPut("{countryId}")]
+        [HttpPut("{ownerId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult Update(int ownerId, [FromBody] OwnerDto? ownerDto)

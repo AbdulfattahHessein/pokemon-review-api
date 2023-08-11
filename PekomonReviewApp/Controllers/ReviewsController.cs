@@ -25,12 +25,12 @@ namespace PokemonReviewApp.Controllers
         //Post api/reviews
         [HttpPost]
         [ProducesResponseType(200, Type = typeof(Review))]
-        public IActionResult Add(int reviewerId, int pokemonId, ReviewDto reviewDto)
+        public IActionResult Add(int reviewId, int pokemonId, ReviewDto reviewDto)
         {
             var review = reviewDto.MapTo<Review>();
 
 
-            var reviewr = _unitOfWork.Reviewers.GetById(reviewerId);
+            var reviewr = _unitOfWork.Reviewers.GetById(reviewId);
             var pokemon = _unitOfWork.Pokemons.GetById(pokemonId);
 
             review.Reviewer = reviewr;
@@ -39,7 +39,7 @@ namespace PokemonReviewApp.Controllers
             //review.Reviewer.Id = reviewerId; // pokemon must be tracked first
             //review.Pokemon.Id = pokemonId;  // pokemon must be tracked first
 
-            _unitOfWork.Reviews.Add(review);
+            _unitOfWork.Reviews.Insert(review);
             _unitOfWork.Complete();
 
             return Ok(review.MapTo<ReviewDto>());
@@ -84,6 +84,30 @@ namespace PokemonReviewApp.Controllers
                 var reviews = _unitOfWork.Reviews.GetReviewsOfPokemon(pokemonId).MapTo<ReviewDto>();
 
                 return Ok(reviews);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        //Put api/reviews/1
+        [HttpPut("{reviewId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult Update(int reviewId, [FromBody] ReviewDto? revieweDto)
+        {
+            try
+            {
+                if (!(reviewId == revieweDto?.Id && _unitOfWork.Reviews.IsExist(reviewId)))
+                    return BadRequest();
+
+                var review = revieweDto!.MapTo<Review>();
+
+                _unitOfWork.Reviews.Update(review);
+
+                _unitOfWork.Complete();
+
+                return NoContent();
             }
             catch (Exception ex)
             {

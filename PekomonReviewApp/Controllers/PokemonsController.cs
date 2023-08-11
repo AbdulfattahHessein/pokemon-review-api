@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PokemonReviewApp.Bases;
 using PokemonReviewApp.DTOs;
 using PokemonReviewApp.Helpers;
 using PokemonReviewApp.Interfaces;
 using PokemonReviewApp.Models;
+using System.Linq;
 
 namespace PokemonReviewApp.Controllers
 {
@@ -13,10 +15,12 @@ namespace PokemonReviewApp.Controllers
     public class PokemonsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public PokemonsController(IUnitOfWork unitOfWork)
+        public PokemonsController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         //GET api/pokemons
@@ -31,7 +35,7 @@ namespace PokemonReviewApp.Controllers
 
             pokemon.AddOwner(owner).AddCategory(category);
 
-            _unitOfWork.Pokemons.Add(pokemon);
+            _unitOfWork.Pokemons.Insert(pokemon);
 
             _unitOfWork.Complete();
 
@@ -100,30 +104,20 @@ namespace PokemonReviewApp.Controllers
             {
                 if (!(pokemonId == pokemonDto?.Id && _unitOfWork.Pokemons.IsExist(pokemonId))) return BadRequest(ModelState);
 
-                var pokemon = pokemonDto!.MapTo<Pokemon>();
+                var pokemon = _unitOfWork.Pokemons.GetFirstOrDefault(p => p.Id == pokemonId, new[] { nameof(Pokemon.Owners), nameof(Pokemon.Categories) });
 
-                pokemon.Owners = _unitOfWork.Owners.GetOwnersOfPokemon(pokemonId).ToList();
+                pokemonDto.MapTo(pokemon);
 
-                pokemon.Categories = _unitOfWork.Categories.GetCategoriesOfPokemon(pokemonId).ToList();
+                var owners = ownersIds.Select(ownerId => _unitOfWork.Owners.GetById(ownerId)).ToList();
 
-                var owners = new List<Owner>();
+                var categories = categoriesIds.Select(categoryId => _unitOfWork.Categories.GetById(categoryId)).ToList();
 
-                foreach (var ownerId in ownersIds)
-                {
-                    owners.Add(_unitOfWork.Owners.GetById(ownerId));
-                }
+                pokemon.Owners = owners;
 
-                var categories = new List<Category>();
-
-                foreach (var categoryId in categoriesIds)
-                {
-                    categories.Add(_unitOfWork.Categories.GetById(categoryId));
-                }
-
-                pokemon.AddOwners(owners);
-                pokemon.AddCategoryies(categories);
+                pokemon.Categories = categories;
 
                 _unitOfWork.Pokemons.Update(pokemon);
+
                 _unitOfWork.Complete();
 
                 return NoContent();

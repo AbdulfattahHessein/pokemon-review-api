@@ -26,7 +26,7 @@ namespace CategoryReviewApp.Controllers
         {
             var category = categoryDto.MapTo<Category>();
 
-            _unitOfWork.Categories.Add(category);
+            _unitOfWork.Categories.Insert(category);
             _unitOfWork.Complete();
 
             return Ok(category);
