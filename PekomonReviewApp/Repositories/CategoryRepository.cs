@@ -8,7 +8,16 @@ namespace PokemonReviewApp.Repositories
     {
         public CategoryRepository(AppDbContext context) : base(context) { }
 
-        public IEnumerable<Pokemon> GetPokemonsByCategoryId(int categoryId)
+        public IEnumerable<Category> GetCategoriesOfPokemon(int pokemonId)
+        {
+            return _context
+                  .Pokemons
+                  .Where(c => c.Id == pokemonId)
+                  .Select(c => c.Categories)
+                  .FirstOrDefault() ?? throw new Exception("There is no pokemons for this category");
+        }
+
+        public IEnumerable<Pokemon> GetPokemonsOfCategory(int categoryId)
         {
             //return _context
             //       .Categories

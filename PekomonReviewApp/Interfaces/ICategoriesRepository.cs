@@ -5,7 +5,9 @@ namespace PokemonReviewApp.Interfaces
 {
     public interface ICategoriesRepository : IBaseRepository<Category>
     {
-        IEnumerable<Pokemon> GetPokemonsByCategoryId(int categoryId);
+        IEnumerable<Pokemon> GetPokemonsOfCategory(int categoryId);
+        IEnumerable<Category> GetCategoriesOfPokemon(int categoryId);
+
 
     }
 }

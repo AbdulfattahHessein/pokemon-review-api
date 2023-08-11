@@ -1,4 +1,6 @@
-﻿using PokemonReviewApp.Bases;
+﻿using NuGet.Packaging;
+using PokemonReviewApp.Bases;
+using System.Linq;
 
 namespace PokemonReviewApp.Models
 {
@@ -24,11 +26,34 @@ namespace PokemonReviewApp.Models
             }
             return this;
         }
+
+        public Pokemon AddOwners(List<Owner> owners)
+        {
+            foreach (var owner in owners)
+            {
+                if (!Owners.Contains(owner))
+                {
+                    Owners.Add(owner);
+                }
+            }
+            return this;
+        }
         public Pokemon AddCategory(Category category)
         {
             if (!Categories.Contains(category))
             {
                 Categories.Add(category);
+            }
+            return this;
+        }
+        public Pokemon AddCategoryies(List<Category> categories)
+        {
+            foreach (var category in categories)
+            {
+                if (!Categories.Contains(category))
+                {
+                    Categories.Add(category);
+                }
             }
             return this;
         }

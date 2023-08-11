@@ -100,5 +100,29 @@ namespace PokemonReviewApp.Controllers
             }
         }
 
+        //GET api/countries/1
+        [HttpPut("{countryId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult Update(int countryId, [FromBody] CountryDto? countryDto)
+        {
+            try
+            {
+                if (!(countryId == countryDto?.Id && _unitOfWork.Countries.IsExist(countryId))) return BadRequest();
+
+                var country = countryDto!.MapTo<Country>();
+
+                _unitOfWork.Countries.Update(country);
+                _unitOfWork.Complete();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+
     }
 }

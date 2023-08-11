@@ -7,16 +7,20 @@ namespace PokemonReviewApp.Configuration
 {
     public static class ConfigurationsExtensions
     {
+        static ConfigurationsExtensions()
+        {
+
+        }
         internal static IServiceCollection AddRepositoriesServices(this IServiceCollection services)
         {
-            services.AddTransient<IPokemonsRepository, PokemonRepository>();
-            services.AddTransient<ICategoriesRepository, CategoryRepository>();
-            services.AddTransient<ICountriesRepository, CountryRepository>();
-            services.AddTransient<IOwnersRepository, OwnerRepository>();
-            services.AddTransient<IReviewsRepository, ReviewRepository>();
-            services.AddTransient<IReviewersRepository, ReviewerRepository>();
+            services.AddScoped<IPokemonsRepository, PokemonRepository>();
+            services.AddScoped<ICategoriesRepository, CategoryRepository>();
+            services.AddScoped<ICountriesRepository, CountryRepository>();
+            services.AddScoped<IOwnersRepository, OwnerRepository>();
+            services.AddScoped<IReviewsRepository, ReviewRepository>();
+            services.AddScoped<IReviewersRepository, ReviewerRepository>();
 
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
             return services;

@@ -6,10 +6,15 @@ namespace PokemonReviewApp.Helpers
 {
     public static class MapperHelper
     {
-        private static readonly IMapper _mapper = ServiceCollectionAccessor
-                                                        .Services
-                                                        .BuildServiceProvider()
-                                                        .GetRequiredService<IMapper>();
+        private static readonly IMapper _mapper;
+
+        static MapperHelper()
+        {
+            _mapper = ServiceCollectionAccessor
+                        .Services
+                        .BuildServiceProvider()
+                        .GetRequiredService<IMapper>();
+        }
         public static TDest MapTo<TDest>(this object entity) //where TDest : IDto
         {
             return (TDest)_mapper.Map(entity, entity.GetType(), typeof(TDest));

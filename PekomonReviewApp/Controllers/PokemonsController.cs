@@ -90,6 +90,50 @@ namespace PokemonReviewApp.Controllers
             }
         }
 
+        //Put api/owners/1
+        [HttpPut("{pokemonId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult Update(int pokemonId, [FromQuery] int[] ownersIds, [FromQuery] int[] categoriesIds, [FromBody] PokemonDto? pokemonDto)
+        {
+            try
+            {
+                if (!(pokemonId == pokemonDto?.Id && _unitOfWork.Pokemons.IsExist(pokemonId))) return BadRequest(ModelState);
+
+                var pokemon = pokemonDto!.MapTo<Pokemon>();
+
+                pokemon.Owners = _unitOfWork.Owners.GetOwnersOfPokemon(pokemonId).ToList();
+
+                pokemon.Categories = _unitOfWork.Categories.GetCategoriesOfPokemon(pokemonId).ToList();
+
+                var owners = new List<Owner>();
+
+                foreach (var ownerId in ownersIds)
+                {
+                    owners.Add(_unitOfWork.Owners.GetById(ownerId));
+                }
+
+                var categories = new List<Category>();
+
+                foreach (var categoryId in categoriesIds)
+                {
+                    categories.Add(_unitOfWork.Categories.GetById(categoryId));
+                }
+
+                pokemon.AddOwners(owners);
+                pokemon.AddCategoryies(categories);
+
+                _unitOfWork.Pokemons.Update(pokemon);
+                _unitOfWork.Complete();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
 
     }
 }

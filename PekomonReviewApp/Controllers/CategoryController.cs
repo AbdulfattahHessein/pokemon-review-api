@@ -72,7 +72,7 @@ namespace CategoryReviewApp.Controllers
         {
             try
             {
-                return Ok(_unitOfWork.Categories.GetPokemonsByCategoryId(categoryId).MapTo<PokemonDto>());
+                return Ok(_unitOfWork.Categories.GetPokemonsOfCategory(categoryId).MapTo<PokemonDto>());
             }
             catch (Exception ex)
             {

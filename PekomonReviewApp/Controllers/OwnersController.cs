@@ -95,5 +95,28 @@ namespace PokemonReviewApp.Controllers
             }
         }
 
+        //Put api/owners/1
+        [HttpPut("{countryId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult Update(int ownerId, [FromBody] OwnerDto? ownerDto)
+        {
+            try
+            {
+                if (!(ownerId == ownerDto?.Id && _unitOfWork.Owners.IsExist(ownerId))) return BadRequest();
+
+                var owner = ownerDto!.MapTo<Owner>();
+
+                _unitOfWork.Owners.Update(owner);
+                _unitOfWork.Complete();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
     }
 }
