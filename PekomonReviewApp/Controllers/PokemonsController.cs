@@ -124,6 +124,24 @@ namespace PokemonReviewApp.Controllers
                 return NotFound(ex.Message);
             }
         }
+        //Delete api/owners/1
+        [HttpDelete("{pokemonId}")]
+        public IActionResult Delete(int pokemonId)
+        {
+            try
+            {
+                var pokemon = _unitOfWork.Pokemons.GetFirstOrDefault(c => c.Id == pokemonId, new[] { nameof(Pokemon.Reviews) });
+                _unitOfWork.Pokemons.Delete(pokemon);
+                _unitOfWork.Reviews.DeleteList(pokemon.Reviews!);
+                _unitOfWork.Complete();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
 
     }

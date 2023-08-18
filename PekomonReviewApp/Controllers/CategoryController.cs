@@ -19,7 +19,7 @@ namespace CategoryReviewApp.Controllers
 
         //Post api/categories
         [HttpPost]
-        [ProducesResponseType(200, Type = typeof(Category))]
+        [ProducesResponseType(200, Type = typeof(CategoryDto))]
         public IActionResult Add(CategoryDto categoryDto)
         {
             var category = categoryDto.MapTo<Category>();
@@ -32,7 +32,7 @@ namespace CategoryReviewApp.Controllers
 
         //GET api/categories
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Category>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<CategoryDto>))]
         public IActionResult GetAll()
         {
             var categories = _unitOfWork.Categories.GetAll().MapTo<CategoryDto>();
@@ -42,7 +42,7 @@ namespace CategoryReviewApp.Controllers
 
         //GET api/categories/{id}
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Category>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<CategoryDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetById(int id)
         {
@@ -64,7 +64,7 @@ namespace CategoryReviewApp.Controllers
 
         //GET api/categories/{id}
         [HttpGet("{categoryId}/pokemons")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Category>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<CategoryDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetPokemonsByCategoryId(int categoryId)
         {
@@ -100,6 +100,25 @@ namespace CategoryReviewApp.Controllers
                 return NotFound(ex.Message);
             }
         }
+        //Delete api/categories/1
+        [HttpDelete("{categoryId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult Delete(int categoryId)
+        {
+            try
+            {
+                var category = _unitOfWork.Categories.GetFirstOrDefault(c => c.Id == categoryId);
+                _unitOfWork.Categories.Delete(category);
+                _unitOfWork.Complete();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
 
 
     }

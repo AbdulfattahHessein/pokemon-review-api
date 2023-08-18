@@ -21,12 +21,12 @@ namespace PokemonReviewApp.Controllers
         //Post api/reviews
         [HttpPost]
         [ProducesResponseType(200, Type = typeof(Review))]
-        public IActionResult Add(int reviewId, int pokemonId, ReviewDto reviewDto)
+        public IActionResult Add(int reviewerId, int pokemonId, ReviewDto reviewDto)
         {
             var review = reviewDto.MapTo<Review>();
 
 
-            var reviewr = _unitOfWork.Reviewers.GetById(reviewId);
+            var reviewr = _unitOfWork.Reviewers.GetById(reviewerId);
             var pokemon = _unitOfWork.Pokemons.GetById(pokemonId);
 
             review.Reviewer = reviewr;
@@ -101,6 +101,24 @@ namespace PokemonReviewApp.Controllers
 
                 _unitOfWork.Reviews.Update(review);
 
+                _unitOfWork.Complete();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        //Delete api/reviewers/1
+        [HttpDelete("{reviewId}")]
+        public IActionResult Delete(int reviewId)
+        {
+            try
+            {
+                var review = _unitOfWork.Reviews.GetFirstOrDefault(c => c.Id == reviewId);
+                _unitOfWork.Reviews.Delete(review);
                 _unitOfWork.Complete();
 
                 return NoContent();

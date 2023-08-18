@@ -19,7 +19,7 @@ namespace PokemonReviewApp.Controllers
 
         //Post api/countries
         [HttpPost]
-        [ProducesResponseType(200, Type = typeof(Country))]
+        [ProducesResponseType(200, Type = typeof(CountryDto))]
         public IActionResult Add(CountryDto categoryDto)
         {
             var country = categoryDto.MapTo<Country>();
@@ -110,6 +110,28 @@ namespace PokemonReviewApp.Controllers
                 var country = countryDto!.MapTo<Country>();
 
                 _unitOfWork.Countries.Update(country);
+                _unitOfWork.Complete();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        //Delete api/countries/1
+        [HttpDelete("{countryId}")]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(400)]
+        public IActionResult Delete(int countryId)
+        {
+            try
+            {
+                var country = _unitOfWork.Countries.GetFirstOrDefault(c => c.Id == countryId, new[] { nameof(Country.Owners) });
+
+                country.Owners.Clear();
+
+                _unitOfWork.Countries.Delete(country);
                 _unitOfWork.Complete();
 
                 return NoContent();

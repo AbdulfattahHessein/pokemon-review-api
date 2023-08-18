@@ -15,6 +15,12 @@ namespace PokemonReviewApp.Data
             base.OnModelCreating(modelBuilder);
 
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            //optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            //optionsBuilder.UseLazyLoadingProxies(false);
+        }
         public DbSet<Pokemon> Pokemons { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Reviewer> Reviewers { get; set; }

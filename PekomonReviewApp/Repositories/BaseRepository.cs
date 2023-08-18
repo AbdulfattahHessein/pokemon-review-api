@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PokemonReviewApp.Bases;
 using PokemonReviewApp.Data;
 using System.Linq.Expressions;
@@ -73,7 +74,7 @@ namespace PokemonReviewApp.Repositories
             }
             return true;
         }
-        public virtual void InsertList(List<T> entityList)
+        public virtual void InsertList(IEnumerable<T> entityList)
         {
             foreach (var entity in entityList)
             {
@@ -89,7 +90,7 @@ namespace PokemonReviewApp.Repositories
             }
             entityEntry.State = EntityState.Modified;
         }
-        public virtual void UpdateList(List<T> entityList)
+        public virtual void UpdateList(IEnumerable<T> entityList)
         {
             foreach (T entity in entityList)
             {
@@ -109,7 +110,7 @@ namespace PokemonReviewApp.Repositories
                 DbSet.Remove(entity);
             }
         }
-        public virtual void DeleteList(List<T> entityList)
+        public virtual void DeleteList(IEnumerable<T> entityList)
         {
             foreach (T entity in entityList)
             {
