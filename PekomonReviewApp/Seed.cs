@@ -3,16 +3,11 @@ using PokemonReviewApp.Models;
 
 namespace PokemonReviewApp
 {
-    public class Seed
+    public static class Seed
     {
-        private readonly AppDbContext AppDbContext;
-        public Seed(AppDbContext context)
+        public static async Task SeedDataAsync(this AppDbContext context)
         {
-            this.AppDbContext = context;
-        }
-        public void SeedAppDbContext()
-        {
-            if (!AppDbContext.Pokemons.Any())
+            if (!context.Pokemons.Any())
             {
                 var pokemons = new List<Pokemon>()
                 {
@@ -112,8 +107,8 @@ namespace PokemonReviewApp
                         }
                 };
 
-                AppDbContext.Pokemons.AddRange(pokemons);
-                AppDbContext.SaveChanges();
+                await context.Pokemons.AddRangeAsync(pokemons);
+                await context.SaveChangesAsync();
             }
         }
     }

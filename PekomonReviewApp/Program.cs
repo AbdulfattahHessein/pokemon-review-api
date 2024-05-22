@@ -15,9 +15,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<Seed>();
-
-
 builder.Services.AddDbContext<AppDbContext>(optionsAction =>
 {
     optionsAction.UseSqlServer(builder.Configuration["ConnectionStrings:pokemonDb"]);
@@ -34,27 +31,30 @@ builder.Services.AddServiceCollectionAccessor();
 var app = builder.Build();
 
 
-#region Seed Data
-
-if (args.Length == 1 && args[0].ToLower() == "seeddata")
-    SeedData(app);
-
-void SeedData(IHost app)
+using (var scope = app.Services.CreateAsyncScope())
 {
-    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    var services = scope.ServiceProvider;
 
-    using (var scope = scopedFactory.CreateScope())
+    var context = services.GetRequiredService<AppDbContext>();
+
+    try
     {
-        var service = scope.ServiceProvider.GetService<Seed>();
-        service.SeedAppDbContext();
+        await context.Database.MigrateAsync();
+
+        await context.SeedDataAsync();
+    }
+    catch (Exception)
+    {
+        await context.Database.EnsureDeletedAsync();
+
+        await context.Database.MigrateAsync();
+
+        await context.SeedDataAsync();
     }
 }
 
-#endregion
-
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
 

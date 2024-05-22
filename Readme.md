@@ -12,6 +12,7 @@ This project is an ASP.NET Core 6 Web API for reviewing Pokemons. It implements 
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
   - [Project Structure](#project-structure)
+  - [Database Schema](#database-schema)
   - [API Endpoints Screenshots](#api-endpoints-screenshots)
     - [Pokemons](#pokemons)
     - [Categories](#categories)
@@ -19,7 +20,6 @@ This project is an ASP.NET Core 6 Web API for reviewing Pokemons. It implements 
     - [Reviewers](#reviewers)
     - [Countries](#countries)
     - [Reviews](#reviews)
-  - [License](#license)
 
 ## Features
 
@@ -43,7 +43,7 @@ This project is an ASP.NET Core 6 Web API for reviewing Pokemons. It implements 
 ### Prerequisites
 
 - .NET 6 SDK
-- SQL Server (or another supported database)
+- SQL Server
 - Visual Studio 2022 (or another code editor)
 
 ### Installation
@@ -51,17 +51,16 @@ This project is an ASP.NET Core 6 Web API for reviewing Pokemons. It implements 
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/yourusername/pokemon-review-api.git
+   git clone https://github.com/AbdulfattahHessein/pokemon-review-api.git
    cd pokemon-review-api
    ```
 
 2. **Set up the database:**
 
    - Update the connection string in `appsettings.json` to point to your database.
-   - Run the following command to apply migrations and create the database:
-     ```sh
-     dotnet ef database update
-     ```
+   - The database will be created automatically and seeded with its data.
+   - Migrations will be applied automatically, there's no need to write any commands
+   - If the database exists and an error occurs during the application of migrations, the database will be deleted and recreated
 
 3. **Run the application:**
    ```sh
@@ -88,6 +87,12 @@ pokemon-review-api/
 └── Startup.cs            # Configuration and middleware setup
 
 ```
+
+## Database Schema
+
+The database schema consists of the following tables:
+
+![Database-Schema](./screenshots/database-schema.png)
 
 ## API Endpoints Screenshots
 
@@ -116,7 +121,3 @@ Here are some screenshots of the API in action:
 ### Reviews
 
 ![Reviews](screenshots/reviews.png)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
