@@ -1,7 +1,6 @@
-﻿using PokemonReviewApp.Data;
-using PokemonReviewApp.Models;
+﻿using PokemonReviewApp.Models;
 
-namespace PokemonReviewApp
+namespace PokemonReviewApp.Data
 {
     public static class Seed
     {

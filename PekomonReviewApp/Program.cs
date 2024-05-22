@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using PokemonReviewApp;
 using PokemonReviewApp.Configuration;
 using PokemonReviewApp.Data;
 using ServiceCollectionAccessorService;

@@ -83,8 +83,7 @@ pokemon-review-api/
 ├── Models/               # Domain models
 ├── Repositories/         # Repository implementations
 ├── appsettings.json      # Configuration file
-├── Program.cs            # Application entry point
-└── Startup.cs            # Configuration and middleware setup
+└── Program.cs            # Application entry point
 
 ```
 
